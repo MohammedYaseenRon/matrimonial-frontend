@@ -19,6 +19,10 @@ export default function RegisterLayout() {
         title: 'Set Password',
         animation: 'slide_from_right',
       }} />
+      <Stack.Screen name="Social" options={{
+        title: 'Social',
+        animation: 'slide_from_right',
+      }} />
     </Stack>
   );
 }

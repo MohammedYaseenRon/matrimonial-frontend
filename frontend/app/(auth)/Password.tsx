@@ -38,7 +38,7 @@ export default function Password() {
         };
 
         if (registrationType === 'social') {
-            router.replace("/social");
+            router.replace("/(auth)/Sociial");
         } else if (registrationType === 'matrimonial') {
             router.replace("/matrimonial");
         } else {
