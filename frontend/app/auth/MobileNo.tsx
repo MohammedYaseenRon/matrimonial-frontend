@@ -221,7 +221,7 @@ export default function MobileNo() {
       // Success case
       const fullMobile = selectedCountryCode.code + mobile;
       setMobileData(fullMobile, true);
-      router.push('/Email');
+      router.push('/auth/Email');
       
     } catch (error) {
       console.error('Error verifying OTP:', error);

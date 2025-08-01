@@ -250,7 +250,7 @@ export default function Email() {
       
       // Navigate after a brief delay to show success message
       setTimeout(() => {
-        router.push('/Password');
+        router.push('/auth/Password');
       }, 1000);
 
     } catch (error) {
