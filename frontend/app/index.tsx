@@ -1,15 +1,19 @@
-import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
-import { useRouter } from 'expo-router';
-import Navbar from '@/components/Landing/Navbar';
 import AboutUs from '@/components/Landing/AboutUs';
 import { Footer } from '@/components/Landing/Footer';
-import { useRegistration } from '../contexts/RegisterContext';
-
+import Navbar from '@/components/Landing/Navbar';
+import { useRegistrationStore } from '@/stores/registrationStore';
+import { useRouter } from 'expo-router';
+import { useEffect } from 'react';
+import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 
 export default function HomePage() {
   const router = useRouter();
-  const { setRegistrationType } = useRegistration();
+  const { setRegistrationType, loadFromStorage } = useRegistrationStore();
+
+  useEffect(() => {
+    loadFromStorage();
+  }, []);
 
   const handleRegister = (type: 'social' | 'matrimonial') => {
     setRegistrationType(type);
