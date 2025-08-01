@@ -46,7 +46,7 @@ export default function Email() {
       // Add a small delay to ensure the layout is mounted
       const timeoutId = setTimeout(() => {
         if (!canProceedToStep(2)) {
-          router.replace('/MobileNo');
+          router.replace('/auth/MobileNo');
         }
       }, 100);
 

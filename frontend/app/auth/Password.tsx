@@ -55,7 +55,7 @@ export default function Password() {
             const timeoutId = setTimeout(() => {
                 if (!canProceedToStep(3)) {
                     setErrorMessage('Please complete the previous steps before proceeding.');
-                    router.replace('/MobileNo');
+                    router.replace('/auth/MobileNo');
                 }
             }, 100);
 

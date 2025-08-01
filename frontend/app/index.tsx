@@ -9,15 +9,18 @@ import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 export default function HomePage() {
   const router = useRouter();
-  const { setRegistrationType, loadFromStorage } = useRegistrationStore();
+  const { setRegistrationType, loadFromStorage, registrationType } = useRegistrationStore();
 
   useEffect(() => {
     loadFromStorage();
+    if (registrationType) {
+      router.push(`${registrationType === 'social' ? '/social' : '/matrimonial'}`);
+    }
   }, []);
 
   const handleRegister = (type: 'social' | 'matrimonial') => {
     setRegistrationType(type);
-    router.push('/MobileNo');
+    router.push('/auth/MobileNo');
   };
 
   return (
