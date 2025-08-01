@@ -1,5 +1,6 @@
 import { UserResponse } from '@/types/user-auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 import { create } from 'zustand';
 
 interface AuthState {
@@ -35,75 +36,138 @@ const initialState = {
 
 const STORAGE_KEY = 'auth-storage'
 
+// Platform-specific storage utility
+const storage = {
+  async getItem(key: string): Promise<string | null> {
+    try {
+      if (Platform.OS === 'web') {
+        // Use localStorage on web for persistence across browser sessions
+        return localStorage.getItem(key);
+      } else {
+        // Use AsyncStorage on mobile
+        return await AsyncStorage.getItem(key);
+      }
+    } catch (error) {
+      console.error('Storage getItem error:', error);
+      return null;
+    }
+  },
+
+  async setItem(key: string, value: string): Promise<void> {
+    try {
+      if (Platform.OS === 'web') {
+        // Use localStorage on web
+        localStorage.setItem(key, value);
+      } else {
+        // Use AsyncStorage on mobile
+        await AsyncStorage.setItem(key, value);
+      }
+    } catch (error) {
+      console.error('Storage setItem error:', error);
+    }
+  },
+
+  async removeItem(key: string): Promise<void> {
+    try {
+      if (Platform.OS === 'web') {
+        // Use localStorage on web
+        localStorage.removeItem(key);
+      } else {
+        // Use AsyncStorage on mobile
+        await AsyncStorage.removeItem(key);
+      }
+    } catch (error) {
+      console.error('Storage removeItem error:', error);
+    }
+  }
+};
+
 export const useAuthStore = create<AuthState>()((set, get) => ({
   ...initialState,
   
   login: (user, accessToken, refreshToken, sessionId) => {
-    set({ 
+    const newState = { 
       user, 
       accessToken, 
       refreshToken, 
       sessionId, 
       isAuthenticated: true 
-    })
-    get().saveToStorage()
+    };
+    set(newState);
+    // Save immediately after login
+    get().saveToStorage();
   },
   
   logout: async () => {
-    set(initialState)
-    await AsyncStorage.removeItem(STORAGE_KEY)
+    set(initialState);
+    await storage.removeItem(STORAGE_KEY);
   },
   
   setRegistrationType: (type) => {
-    set({ registrationType: type })
-    get().saveToStorage()
+    set({ registrationType: type });
+    get().saveToStorage();
   },
   
   updateCredits: (amount) => {
-    set({ credits: get().credits + amount })
-    get().saveToStorage()
+    set({ credits: get().credits + amount });
+    get().saveToStorage();
   },
   
   updateTokens: (accessToken, refreshToken) => {
-    set({ accessToken, refreshToken })
-    get().saveToStorage()
+    set({ accessToken, refreshToken });
+    get().saveToStorage();
   },
   
   loadFromStorage: async () => {
     try {
-      const stored = await AsyncStorage.getItem(STORAGE_KEY)
+      const stored = await storage.getItem(STORAGE_KEY);
       if (stored) {
-        const data = JSON.parse(stored)
-        set({
-          user: data.user || null,
-          registrationType: data.registrationType || null,
-          credits: data.credits || 0,
-          isAuthenticated: data.isAuthenticated || false,
-          accessToken: data.accessToken || null,
-          refreshToken: data.refreshToken || null,
-          sessionId: data.sessionId || null,
-        })
+        const data = JSON.parse(stored);
+        
+        // Validate the stored data has required fields
+        if (data.accessToken && data.refreshToken && data.sessionId) {
+          set({
+            user: data.user || null,
+            registrationType: data.registrationType || null,
+            credits: data.credits || 0,
+            isAuthenticated: data.isAuthenticated || false,
+            accessToken: data.accessToken || null,
+            refreshToken: data.refreshToken || null,
+            sessionId: data.sessionId || null,
+          });
+          
+        } else {
+          await storage.removeItem(STORAGE_KEY);
+        }
       }
     } catch (error) {
-      console.error('Failed to load auth data:', error)
+      console.error('Failed to load auth data:', error);
+      // Clear potentially corrupted data
+      await storage.removeItem(STORAGE_KEY);
     }
   },
   
   saveToStorage: async () => {
     try {
-      const state = get()
-      const dataToSave = {
-        user: state.user,
-        registrationType: state.registrationType,
-        credits: state.credits,
-        isAuthenticated: state.isAuthenticated,
-        accessToken: state.accessToken,
-        refreshToken: state.refreshToken,
-        sessionId: state.sessionId,
+      const state = get();
+      
+      // Only save if we have valid authentication data
+      if (state.accessToken && state.refreshToken && state.sessionId) {
+        const dataToSave = {
+          user: state.user,
+          registrationType: state.registrationType,
+          credits: state.credits,
+          isAuthenticated: state.isAuthenticated,
+          accessToken: state.accessToken,
+          refreshToken: state.refreshToken,
+          sessionId: state.sessionId,
+          // Add timestamp for potential expiry checking
+          savedAt: new Date().toISOString(),
+        };
+        
+        await storage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
       }
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave))
     } catch (error) {
-      console.error('Failed to save auth data:', error)
     }
   },
 }))

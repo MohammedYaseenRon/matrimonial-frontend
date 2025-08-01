@@ -1,6 +1,6 @@
 import { Configs } from "@/constants/Configs";
+import { useAuth } from "@/hooks/useAuth";
 import { useRegistrationStore } from "@/stores/registrationStore";
-import useAuthStore from "@/stores/useAuthStore";
 import DeviceIdentification from "@/utils/DeviceIdentification";
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
@@ -27,7 +27,7 @@ export default function Password() {
         getRegistrationPayload, 
         resetRegistration 
     } = useRegistrationStore();
-    const { login } = useAuthStore();
+    const { login, setRegistrationType: setAuthStoreRegistrationType } = useAuth();
 
     const [password, setPasswordInput] = useState("");
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -145,7 +145,6 @@ export default function Password() {
                 // Store authentication data if available
                 if (authData.user && authData.accessToken && authData.refreshToken && authData.sessionId) {
                     login(authData.user, authData.accessToken, authData.refreshToken, authData.sessionId);
-                    console.log('Registration successful:', authData);
                 }
 
                 setSuccessMessage(data.message || 'Registration successful. Welcome to our platform!');
@@ -154,7 +153,7 @@ export default function Password() {
                 setTimeout(() => {
                     
                     if (isMounted) {
-                        console.log(registrationType)
+                        setAuthStoreRegistrationType(registrationType ?? 'matrimonial');
                         // Navigate based on registration type
                         if (registrationType === 'social') {
                             resetRegistration();
@@ -163,7 +162,7 @@ export default function Password() {
                             resetRegistration();
                             router.replace("/matrimonial");
                         } else {
-                            router.replace('/(tabs)');
+                            router.replace('/');
                         }
                     }
                 }, 2000);

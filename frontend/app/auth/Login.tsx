@@ -1,5 +1,5 @@
 import { Configs } from "@/constants/Configs";
-import useAuthStore from "@/stores/useAuthStore";
+import { useAuth } from "@/hooks/useAuth";
 import DeviceIdentification from "@/utils/DeviceIdentification";
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ import {
 
 export default function Login() {
     const router = useRouter();
-    const { login, isAuthenticated } = useAuthStore();
+    const { login, isAuthenticated } = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

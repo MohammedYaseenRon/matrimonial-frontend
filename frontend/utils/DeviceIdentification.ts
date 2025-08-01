@@ -80,7 +80,6 @@ class DeviceIdentification {
       // Store for future use
       await AsyncStorage.setItem(this.DEVICE_ID_KEY, deviceId);
       
-      console.log('Generated device ID:', deviceId);
       return deviceId;
 
     } catch (error) {
@@ -171,7 +170,6 @@ class DeviceIdentification {
         this.INSTALLATION_ID_KEY,
         `${this.DEVICE_ID_KEY}_component`
       ]);
-      console.log('Device data cleared');
     } catch (error) {
       console.error('Error clearing device data:', error);
     }
