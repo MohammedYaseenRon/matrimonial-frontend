@@ -5,6 +5,7 @@ type Ethnicity = "Indian" | "Caucasian" | "African American" | "Hispanic" | "Asi
 type Religion = "Hinduism" | "Christianity" | "Islam" | "Sikhism" | "Buddhism" | "Judaism" | "Atheist" | "Other";
 type Caste = "Brahmin" | "Kshatriya" | "Vaishya" | "Shudra" | "SC" | "ST" | "OBC" | "General" | "Other";
 export type Country = "India" | "USA" | "UK";
+export type PartnerLooking = "" | "Bride" |  "Groom" 
 
 export type State =
     | "Maharashtra" | "Karnataka" | "Tamil Nadu"
@@ -47,6 +48,43 @@ export interface SocialProile {
 
 }
 
+
+export interface MatrimonialProfile {
+    id: string;
+    lookingFor: string;
+    firstName:string;
+    lastName:string;
+    userName:string;
+    age: number;
+    gender: Gender;
+    orientation: Orientation;
+    ethnicity: Ethnicity;
+    religion: Religion;
+    caste: Caste;
+    subCaste?: string;
+    country: Country;
+    state: State;
+    city: City;
+
+    partnerLookingFor:PartnerLooking;
+    partnerAgeRange: {
+        min: number;
+        max: number;
+    }
+    partnerPreferredLocation: {
+        sameCity: boolean;
+        sameState: boolean;
+        sameCountry: boolean;
+        anywhere: boolean;
+    };
+    profileCompleted: boolean;
+
+}
+
+export const partner: PartnerLooking[] = [
+    "Bride",
+    "Groom"
+]
 
 export const religions: Religion[] = [
     'Hinduism',

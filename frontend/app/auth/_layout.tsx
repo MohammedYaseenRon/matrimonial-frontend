@@ -23,6 +23,10 @@ export default function RegisterLayout() {
         title: 'Social',
         animation: 'slide_from_right',
       }} />
+      <Stack.Screen name="Matrimonial" options={{
+        title: 'Matrimonial',
+        animation: 'slide_from_right',
+      }} />
     </Stack>
   );
 }
