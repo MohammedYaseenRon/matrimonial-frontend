@@ -36,7 +36,7 @@ class ApiClient {
     }
 
     try {
-      const response = await fetch(`${this.baseURL}/auth/refresh`, {
+      const response = await fetch(`${this.baseURL}/auth/refresh-tokens`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ class ApiClient {
 
       const data = await response.json();
 
-      if (data.success && data.accessToken && data.refreshToken) {
+      if (data.accessToken && data.refreshToken) {
         updateTokens(data.accessToken, data.refreshToken);
         return true;
       } else {

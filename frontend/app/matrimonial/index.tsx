@@ -32,10 +32,10 @@ export default function Matrimonial() {
                 setError('');
                 try {
                     const profileResponse = await getUserProfile();
-                    if (profileResponse.success) {
+                    if (profileResponse) {
                         setProfile(profileResponse.data);
                     } else {
-                        setError(profileResponse.message || 'Failed to load profile data.');
+                        setError('Failed to load profile data.');
                     }
                 } catch (err) {
                     console.error('[Matrimonial] Failed to fetch profile:', err);

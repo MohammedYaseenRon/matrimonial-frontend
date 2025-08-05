@@ -35,7 +35,7 @@ export default function Login() {
         
         // If user is already authenticated, redirect to appropriate page
         if (isAuthenticated) {
-            router.replace('/(tabs)');
+            router.replace('/');
         }
         
         return () => setIsMounted(false);

@@ -48,6 +48,62 @@ export interface UserAuthResponse {
     sessionId: string;
 }
 
+export interface SocialProfile {
+    id: number;
+    userId: string;
+    firstName: string;
+    lastName: string;
+    userName: string;
+    age: number;
+    gender: string;
+    orientation: string;
+    lookingFor: string;
+    ethnicity: string;
+    religion: string | null;
+    countryId: number;
+    stateId: number | null;
+    cityId: number | null;
+    isProfileActive: boolean;
+    isProfileComplete: boolean;
+    profileVisibility: string;
+    showOnlyInMyArea: boolean;
+    bio: string | null;
+    interests: string | null;
+    lastActiveAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface MatrimonialProfile {
+    id: number;
+    userId: string;
+    lookingFor: string;
+    firstName: string;
+    lastName: string;
+    userName: string;
+    age: number;
+    gender: string;
+    orientation: string;
+    ethnicity: string;
+    religion: string;
+    casteId: number | null;
+    customCaste: string | null;
+    countryId: number;
+    stateId: number | null;
+    cityId: number | null;
+    isProfileActive: boolean;
+    isProfileComplete: boolean;
+    profileVisibility: string;
+    lastActiveAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export type UserAuthWithProfiles = Omit<UserAuth, 'socialProfile' | 'matrimonialProfile'> & {
+    socialProfile?: SocialProfile | null;
+    matrimonialProfile?: MatrimonialProfile | null;
+}
+
 export interface CreateUserAuth {
     email: string;
     mobile: string;
