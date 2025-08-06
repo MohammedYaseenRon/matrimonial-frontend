@@ -1,3 +1,4 @@
+import { apiClient } from '@/utils/AuthClient';
 import React, { useEffect, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -25,14 +26,12 @@ interface CreditPurchaseProps {
   section: 'matrimonial' | 'social';
   userEmail: string;
   userMobile: string;
-  authToken: string;
 }
 
 const CreditPurchase: React.FC<CreditPurchaseProps> = ({ 
   section, 
   userEmail, 
-  userMobile, 
-  authToken 
+  userMobile
 }) => {
   const [packages, setPackages] = useState<CreditPackage[]>([]);
   const [loading, setLoading] = useState(false);
@@ -59,9 +58,10 @@ const CreditPurchase: React.FC<CreditPurchaseProps> = ({
 
   const loadCreditPackages = async () => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_BASE_URL}/payments/packages`);
-      const data = await response.json();
-      setPackages(data.packages);
+      const response = await apiClient.get('/payments/packages');
+      if (response.success && response.data) {
+        setPackages(response.data.packages || response.data);
+      }
     } catch (error) {
       console.error('Failed to load packages:', error);
     }
@@ -69,11 +69,10 @@ const CreditPurchase: React.FC<CreditPurchaseProps> = ({
 
   const loadCurrentBalance = async () => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_SERVER_BASE_URL}/payments/balance/${section}`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      });
-      const data = await response.json();
-      setCurrentBalance(parseFloat(data.credits));
+      const response = await apiClient.get(`/payments/balance/${section}`);
+      if (response.success && response.data) {
+        setCurrentBalance(parseFloat(response.data.credits || response.data));
+      }
     } catch (error) {
       console.error('Failed to load balance:', error);
     }
@@ -86,24 +85,17 @@ const CreditPurchase: React.FC<CreditPurchaseProps> = ({
     
     try {
       // 1. Create Razorpay order
-      const orderResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_BASE_URL}/payments/create-order`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-        },
-        body: JSON.stringify({
-          section,
-          amount: packageData.price,
-          packageType: packageData.id
-        })
+      const orderResponse = await apiClient.post('/payments/create-order', {
+        section,
+        amount: packageData.price,
+        packageType: packageData.id
       });
 
-      if (!orderResponse.ok) {
+      if (!orderResponse.success || !orderResponse.data) {
         throw new Error('Failed to create order');
       }
 
-      const order = await orderResponse.json();
+      const order = orderResponse.data;
 
       // 2. Initialize Razorpay checkout based on platform
       if (Platform.OS === 'web') {
@@ -202,23 +194,14 @@ const CreditPurchase: React.FC<CreditPurchaseProps> = ({
 
   const handlePaymentSuccess = async (response: any) => {
     try {
-      const verifyResponse = await fetch(`${process.env.EXPO_PUBLIC_SERVER_BASE_URL}/payments/verify-payment`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-        },
-        body: JSON.stringify({
-          razorpay_payment_id: response.razorpay_payment_id,
-          razorpay_order_id: response.razorpay_order_id,
-          razorpay_signature: response.razorpay_signature
-        })
+      const verifyResponse = await apiClient.post('/payments/verify-payment', {
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_signature: response.razorpay_signature
       });
-
-      const result = await verifyResponse.json();
       
-      if (result.success) {
-        alert(`Success! ${result.creditsAdded} credits added to your ${section} account.`);
+      if (verifyResponse.success && verifyResponse.data) {
+        alert(`Success! ${verifyResponse.data.creditsAdded || 'Credits'} added to your ${section} account.`);
         await loadCurrentBalance(); // Refresh balance
       } else {
         throw new Error('Payment verification failed');

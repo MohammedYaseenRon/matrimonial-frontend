@@ -1,5 +1,5 @@
-import { Configs } from '@/constants/Configs';
 import { useRegistrationStore } from '@/stores/registrationStore';
+import { apiClient } from '@/utils/AuthClient';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -113,35 +113,18 @@ export default function MobileNo() {
     resetOtpState();
 
     try {
-      const response = await fetch(`${Configs.SERVER_URL}/otp/generate-mobile`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          phone: selectedCountryCode.code + mobile,
-        }),
+      const response = await apiClient.postUnauthenticated('/otp/generate-mobile', {
+        phone: selectedCountryCode.code + mobile,
       });
 
-      const data = await response.json();
-
-      // Handle non-200 status codes
-      if (!response.ok) {
-        const errorMsg = data.message || `Server error: ${response.status}`;
-        setErrorMessage(errorMsg);
-        setIsLoading(false);
-        return;
-      }
-
-      // Handle business logic failures (success: false)
-      if (!data.success) {
-        setErrorMessage(data.message || 'Failed to generate OTP');
+      if (!response.success) {
+        setErrorMessage(response.error || response.message || 'Failed to generate OTP');
         setIsLoading(false);
         return;
       }
 
       // Success case
-      const actualGeneratedOtp = data.otp;
+      const actualGeneratedOtp = response.data?.otp;
       setFinalOtp(actualGeneratedOtp);
 
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -189,30 +172,12 @@ export default function MobileNo() {
     setErrorMessage('');
 
     try {
-      const response = await fetch(`${Configs.SERVER_URL}/otp/verify-mobile`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          phone: selectedCountryCode.code + mobile,
-        }),
+      const response = await apiClient.postUnauthenticated('/otp/verify-mobile', {
+        phone: selectedCountryCode.code + mobile,
       });
 
-      const data = await response.json();
-
-      // Handle non-200 status codes
-      if (!response.ok) {
-        const errorMsg = data.message || `Verification failed: ${response.status}`;
-        setErrorMessage(errorMsg);
-        setIsVerifying(false);
-        resetOtpState();
-        return;
-      }
-
-      // Handle business logic failures (success: false)
-      if (!data.success) {
-        setErrorMessage(data.message || 'OTP verification failed');
+      if (!response.success) {
+        setErrorMessage(response.error || response.message || 'OTP verification failed');
         setIsVerifying(false);
         resetOtpState();
         return;

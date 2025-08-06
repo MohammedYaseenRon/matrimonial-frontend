@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 
 export default function Social() {
-    const { accessToken, isAuthenticated, user, isLoading: isAuthLoading } = useAuth();
+    const { isAuthenticated, user, isLoading: isAuthLoading, hasValidAuth } = useAuth();
     const [profile, setProfile] = useState<UserAuthWithProfiles | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -16,6 +16,7 @@ export default function Social() {
         try {
             const response = await apiClient.get('/auth/profile');
             console.log('[Social] User profile response:', response);
+            console.log('[Social] User: ', user)
             return response;
         } catch (error) {
             console.error('[Social] Error fetching user profile:', error);
@@ -28,7 +29,7 @@ export default function Social() {
             return;
         }
 
-        if (isAuthenticated && accessToken) {
+        if (hasValidAuth) {
             const fetchProfile = async () => {
                 setIsLoading(true);
                 setError('');
@@ -52,7 +53,7 @@ export default function Social() {
         } else {
             router.replace('/auth/Login');
         }
-    }, [isAuthLoading, isAuthenticated, accessToken]);
+    }, [isAuthLoading, hasValidAuth]);
 
     if (!isAuthenticated) {
         return (
@@ -93,12 +94,10 @@ export default function Social() {
                 <View>
                     <Text className="text-lg font-semibold mb-2">Profile Data:</Text>
                     <Text>{JSON.stringify(profile, null, 2)}</Text>
-                    <Text>Test Checkout Button</Text>
                     <CreditPurchase
                         section="social"
                         userEmail={user?.email || 'usmanimohammed12@gmail.com'}
                         userMobile={user?.mobile || '1234567890'}
-                        authToken={accessToken || ''}
                     />
                 </View>
             ) : (
