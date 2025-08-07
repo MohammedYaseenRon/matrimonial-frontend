@@ -1,12 +1,12 @@
 import React from "react";
-import { View,Text } from "react-native";
+import { Text, View } from "react-native";
 
 
 
 export default function Faq() {
   const faqs = [
     {
-      question: "Is ConnectApp free to use?",
+      question: "Is {process.env.EXPO_PUBLIC_PROJECT_NAME} free to use?",
       answer: "Yes! Basic features are free. Premium features available with subscription."
     },
     {
