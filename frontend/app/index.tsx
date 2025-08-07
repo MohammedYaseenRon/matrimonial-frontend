@@ -33,31 +33,54 @@ export default function HomePage() {
         {/* Hero Section with Background */}
         <ImageBackground
           source={{ uri: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80' }}
-          style={{ width: '100%', minHeight: height * 0.7 }}
+          style={{ 
+            width: '100%', 
+            minHeight: Math.max(height * 0.75, 600), // Ensure minimum 600px height
+            height: 'auto'
+          }}
           resizeMode="cover"
         >
           <LinearGradient
             colors={['rgba(147, 51, 234, 0.8)', 'rgba(219, 39, 119, 0.8)', 'rgba(239, 68, 68, 0.6)']}
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}
+            style={{ 
+              flex: 1, 
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              paddingHorizontal: 20,
+              paddingVertical: 60, // Add consistent vertical padding
+              minHeight: Math.max(height * 0.75, 600) // Same minimum height
+            }}
           >
-            <View className="items-center">
-              <Text className="text-5xl font-bold text-center mb-4 text-white leading-tight">
+            <View className="items-center w-full">
+              <Text 
+                className="font-bold text-center mb-6 text-white leading-tight"
+                style={{ 
+                  fontSize: width < 768 ? 36 : 48, // Responsive font size
+                  lineHeight: width < 768 ? 42 : 54
+                }}
+              >
                 Find Your{'\n'}Perfect Match
               </Text>
-              <Text className="text-xl text-center text-white/90 mb-12 leading-relaxed max-w-sm">
+              <Text 
+                className="text-center text-white/90 mb-12 leading-relaxed max-w-sm"
+                style={{ 
+                  fontSize: width < 768 ? 18 : 20,
+                  lineHeight: width < 768 ? 24 : 28
+                }}
+              >
                 Where meaningful relationships begin and lasting connections are made
               </Text>
               
               {/* CTA Buttons */}
-              <View className="w-full max-w-sm space-y-4">
+              <View className="w-full max-w-sm" style={{ gap: 16 }}>
                 <Pressable
                   onPress={() => handleRegister('matrimonial')}
-                  className="bg-white/95 backdrop-blur-sm p-5 rounded-2xl shadow-xl active:scale-95 mb-4 md:mb-0"
+                  className="bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-xl active:scale-95"
                   style={{ transform: [{ scale: 1 }] }}
                 >
                   <View className="items-center">
-                    <Text className="text-2xl font-bold text-purple-700 mb-2">Find Love</Text>
-                    <Text className="text-gray-700 text-center leading-5">
+                    <Text className="text-2xl font-bold text-purple-700 mb-3">Find Love</Text>
+                    <Text className="text-gray-700 text-center leading-6">
                       Discover your life partner through meaningful connections
                     </Text>
                   </View>
@@ -65,12 +88,12 @@ export default function HomePage() {
 
                 <Pressable
                   onPress={() => handleRegister('social')}
-                  className="bg-white/90 backdrop-blur-sm p-5 rounded-2xl shadow-lg active:scale-95"
+                  className="bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-lg active:scale-95"
                   style={{ transform: [{ scale: 1 }] }}
                 >
                   <View className="items-center">
-                    <Text className="text-2xl font-bold text-pink-600 mb-2">Make Friends</Text>
-                    <Text className="text-gray-700 text-center leading-5">
+                    <Text className="text-2xl font-bold text-pink-600 mb-3">Make Friends</Text>
+                    <Text className="text-gray-700 text-center leading-6">
                       Build lasting friendships and expand your social circle
                     </Text>
                   </View>

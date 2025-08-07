@@ -1,0 +1,78 @@
+/* Web-specific styles for better compatibility */
+@import url('@/global.css');
+
+/* Ensure proper font rendering on web */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Fix hero section height issues on web */
+.hero-section {
+  min-height: 600px !important;
+  height: auto !important;
+}
+
+/* Fix for ImageBackground on web */
+.image-background {
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  min-height: 600px !important;
+}
+
+/* Fix gradient support for web */
+.gradient-bg {
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+}
+
+/* Ensure proper responsive behavior */
+@media (max-width: 768px) {
+  .mobile-responsive {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .hero-section {
+    min-height: 500px !important;
+    padding: 40px 20px !important;
+  }
+}
+
+/* Fix backdrop-blur for web */
+.backdrop-blur {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Ensure proper shadow rendering */
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Fix text rendering issues */
+.text-white\/90 {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.text-white\/70 {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Fix background gradients that might not work properly */
+.bg-gradient-to-r {
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+.bg-gradient-to-b {
+  background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+}
+
+.bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}

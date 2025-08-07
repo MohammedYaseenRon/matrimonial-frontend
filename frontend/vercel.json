@@ -4,6 +4,7 @@
   "devCommand": "npm run web",
   "installCommand": "npm install",
   "framework": null,
+  "functions": {},
   "rewrites": [
     {
       "source": "/(.*)",
@@ -19,6 +20,23 @@
           "value": "public, max-age=31536000, immutable"
         }
       ]
+    },
+    {
+      "source": "/_expo/static/css/(.*)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/css"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     }
-  ]
+  ],
+  "env": {
+    "EXPO_PUBLIC_SERVER_BASE_URL": "@expo_public_server_base_url",
+    "EXPO_PUBLIC_PROJECT_NAME": "@expo_public_project_name"
+  }
 }
