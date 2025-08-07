@@ -1,151 +1,70 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { Image } from 'expo-image';
+import { View, Text } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
-const FeatureCard = ({ title, text, imgUri, bgColor, iconBg }:any) => (
-  <View className="flex-1 mx-2 mb-4">
-    <View className={`${bgColor} rounded-2xl p-4 h-48 shadow-lg`}>
-      <View className="items-center mb-3">
-        <View className={`${iconBg} rounded-xl p-3`}>
-          <Image
-            source={imgUri}
-            className="w-10 h-10"
-            contentFit="contain"
-          />
-        </View>
-      </View>
-      <View className="flex-1 justify-center">
-        <Text className="text-lg font-bold text-white mb-2 text-center">{title}</Text>
-        <Text className="text-white/90 text-xs leading-4 text-center">{text}</Text>
-      </View>
-    </View>
-  </View>
-);
 
-const StatCard = ({ number, label }:any) => (
-  <View className="bg-white rounded-xl p-4 items-center shadow-md flex-1 mx-1">
-    <Text className="text-2xl font-bold text-purple-600">{number}</Text>
-    <Text className="text-gray-600 text-xs mt-1 text-center">{label}</Text>
-  </View>
-);
+const stats = [
+  {
+    number: "2M+",
+    label: "Happy Couples",
+    icon: <Feather name="heart" size={20} color="red" />
+  },
+  {
+    number: "50M+",
+    label: "Active Users",
+    icon: <Feather name="users" size={20} color="blue" />
+  },
+  {
+    number: "190+",
+    label: "Countries",
+    icon: <Feather name="globe" size={20} color="green" />
+  },
+  {
+    number: "15+",
+    label: "Years Experience",
+    icon: <Feather name="clock" size={20} color="orange" />
+  }
+];
+
+
+
 
 export default function AboutUs() {
   return (
-    <ScrollView className="flex-1 bg-gray-50" showsVerticalScrollIndicator={false}>
-      {/* Hero Section */}
-      <View className="bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 px-6 pt-16 pb-12 rounded-b-3xl">
-        <View className="items-center">
-          <View className="bg-white/20 rounded-full p-4 mb-6">
-            <Image
-              source="https://cdn-icons-png.flaticon.com/512/4207/4207222.png"
-              className="w-16 h-16"
-              contentFit="contain"
-            />
-          </View>
-          <Text className="text-4xl font-bold text-white text-center mb-3">
-            About ConnectApp
-          </Text>
-          <Text className="text-white/90 text-center text-lg leading-6 max-w-xs">
-            Where relationships begin and friendships flourish
-          </Text>
-        </View>
-      </View>
-
-      {/* Stats Section */}
-      <View className="px-6 -mt-8 mb-8">
-        <View className="flex-row">
-          <StatCard number="50K+" label="Active Users" />
-          <StatCard number="12K+" label="Success Stories" />
-          <StatCard number="98%" label="Satisfaction Rate" />
-        </View>
-      </View>
-
-      {/* Main Content */}
-      <View className="px-6 pb-8">
-        {/* Introduction */}
-        <View className="bg-white rounded-2xl p-6 mb-8 shadow-sm">
-          <Text className="text-2xl font-bold text-gray-800 mb-4 text-center">
-            Our Story
-          </Text>
-          <Text className="text-gray-600 text-center leading-6">
-            Welcome to <Text className="font-bold text-pink-500">ConnectApp</Text> – a modern platform 
-            blending matrimonial connections with social discovery. We believe meaningful relationships 
-            come in many forms, and we're here to help you find yours.
-          </Text>
-        </View>
-
-        {/* Feature Cards Grid */}
-        <View className="mb-6">
-          <Text className="text-2xl font-bold text-gray-800 mb-4 text-center">
-            What We Offer
-          </Text>
-          
-          {/* First Row */}
-          <View className="flex-row mb-4">
-            <FeatureCard
-              title="💍 Matrimonial"
-              text="Find your perfect life partner through our advanced compatibility matching system with shared values and culture."
-              imgUri="https://cdn-icons-png.flaticon.com/512/4207/4207222.png"
-              bgColor="bg-gradient-to-br from-pink-500 to-rose-400"
-              iconBg="bg-white/20"
-            />
-            <FeatureCard
-              title="🌟 Social Hub"
-              text="Build genuine friendships and expand your social circle in a safe, respectful environment."
-              imgUri="https://cdn-icons-png.flaticon.com/512/456/456212.png"
-              bgColor="bg-gradient-to-br from-blue-500 to-cyan-400"
-              iconBg="bg-white/20"
-            />
-          </View>
-          
-          {/* Second Row */}
-          <View className="flex-row">
-            <FeatureCard
-              title="🛡️ Privacy First"
-              text="Advanced privacy settings, verified profiles, and secure messaging ensure your safety is our priority."
-              imgUri="https://cdn-icons-png.flaticon.com/512/456/456283.png"
-              bgColor="bg-gradient-to-br from-green-500 to-emerald-400"
-              iconBg="bg-white/20"
-            />
-            {/* <FeatureCard
-              title="🎯 Smart Match"
-              text="AI-powered algorithm learns your preferences to suggest compatible matches based on lifestyle and goals."
-              imgUri="https://cdn-icons-png.flaticon.com/512/6337/6337681.png"
-              bgColor="bg-gradient-to-br from-purple-500 to-indigo-400"
-              iconBg="bg-white/20"
-            /> */}
-          </View>
-        </View>
-
-        {/* Mission Statement */}
-        <View className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-6 mt-6">
-          <Text className="text-xl font-bold text-gray-800 mb-3 text-center">
-            Our Mission
-          </Text>
-          <Text className="text-gray-700 text-center leading-6 mb-4">
-            To create a world where everyone finds meaningful connections, whether it's 
-            love, friendship, or companionship. We're building more than an app – we're 
-            building a community.
-          </Text>
-          <View className="bg-white/70 rounded-xl p-4">
-            <Text className="text-gray-600 text-center italic text-sm">
-              "Every great relationship starts with a single connection"
+    <View className="bg-gradient-to-br from-rose-300 via-pink-200 to-purple-200 px-6 py-20">
+      <View className="max-w-6xl mx-auto">
+        {/* Header Section */}
+        <View className="items-center mb-16">
+          <View className="flex-row items-center mb-4 border border-pink-200 rounded-xl p-2 bg-white/70">
+            <View className="w-6 h-0.5 bg-pink-500 mr-3"></View>
+            <Text className="text-pink-600 font-semibold text-sm uppercase tracking-wider">
+              About SoulMate Stories
             </Text>
           </View>
-        </View>
 
-        {/* Call to Action */}
-        <View className="mt-8 items-center">
-          <View className="bg-gradient-to-r from-purple-600 to-pink-500 rounded-full px-8 py-4">
-            <Text className="text-white font-bold text-lg">
-              Start Your Journey Today
-            </Text>
-          </View>
-          <Text className="text-gray-500 text-center mt-4 text-sm">
-            Join thousands who found their perfect match
+          <Text className="text-6xl font-black text-center mb-8 leading-tight">
+            <Text className="text-gray-800">Where Love Stories</Text>{'\n'}
+            <Text className="text-pink-600">Begin</Text>
+          </Text>
+
+          <Text className="text-gray-700 text-center text-lg leading-relaxed max-w-4xl">
+            We're more than just a matrimonial platform. We're the beginning of your
+            greatest love story, connecting hearts across the globe with trust, authenticity,
+            and hope.
           </Text>
         </View>
+
+        {/* Stats Section */}
+        <View className="flex-row justify-center items-center gap-4">
+          {stats.map((stat, index) => (
+            <View key={index} className="items-center my-4 border border-pink-100 bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg">
+              {stat.icon}
+              <Text className="text-2xl font-black mt-2 text-gray-800">{stat.number}</Text>
+              <Text className="text-sm text-gray-600 font-medium">{stat.label}</Text>
+            </View>
+          ))}
+        </View>
       </View>
-    </ScrollView>
+    </View>
   );
 }

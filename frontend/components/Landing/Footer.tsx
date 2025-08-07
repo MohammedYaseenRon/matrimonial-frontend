@@ -1,5 +1,6 @@
+import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { View,Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 export function Footer() {
   return (
@@ -10,7 +11,7 @@ export function Footer() {
           Building meaningful connections worldwide
         </Text>
       </View>
-      
+
       <View className="flex-row justify-around mb-8">
         <View>
           <Text className="text-white font-bold mb-3">Company</Text>
@@ -31,11 +32,21 @@ export function Footer() {
           <Text className="text-gray-400">Cookies</Text>
         </View>
       </View>
-      
-      <View className="border-t border-gray-700 pt-6 items-center">
+      <View className="border-t border-gray-700 pt-6 flex-row justify-between items-center">
         <Text className="text-gray-500 text-sm">
           © 2024 ConnectApp. All rights reserved.
         </Text>
+        <View className="flex-row gap-4">
+          <TouchableOpacity onPress={() => { }} style={{ alignItems: 'center' }}>
+            <FontAwesome name="instagram" size={16} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { }} style={{ alignItems: 'center' }}>
+            <FontAwesome name="facebook" size={16} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { }} style={{ alignItems: 'center' }}>
+            <FontAwesome name="twitter" size={16} color="white" className="rotate-90" />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
