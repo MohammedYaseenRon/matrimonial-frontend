@@ -68,7 +68,7 @@ export default function Features() {
 
                     <Text className="text-4xl lg:text-6xl font-black text-center mb-6 lg:mb-8 leading-tight px-4">
                         <Text className="text-gray-800">Why Choose</Text>{'\n'}
-                        <Text className="text-blue-600">ConnectApp?</Text>
+                        <Text className="text-blue-600">{process.env.EXPO_PUBLIC_PROJECT_NAME}?</Text>
                     </Text>
 
                     <Text className="text-gray-700 text-center text-base lg:text-lg leading-relaxed max-w-4xl px-4">

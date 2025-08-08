@@ -1,3 +1,93 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Web-specific fixes */
+@layer base {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  html, body {
+    height: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Fix for React Native Web ScrollView */
+  .scrollView {
+    overflow: auto;
+  }
+  
+  /* Fix for ImageBackground component on web */
+  [data-testid="image-background"],
+  .react-native-image-background {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 600px !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+  }
+}
+
+@layer components {
+  /* Hero section specific fixes */
+  .hero-container {
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .hero-container {
+      min-height: 500px;
+      padding: 40px 20px;
+    }
+  }
+}
+
+@layer utilities {
+  /* Fix for gradient backgrounds on web */
+  .bg-gradient-to-r {
+    background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  }
+  
+  .bg-gradient-to-b {
+    background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+  }
+  
+  .bg-gradient-to-br {
+    background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+  }
+  
+  /* Fix backdrop blur */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  
+  /* Fix for opacity classes */
+  .text-white\/90 {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .text-white\/70 {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .bg-white\/95 {
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+  
+  .bg-white\/90 {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .bg-white\/80 {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+}

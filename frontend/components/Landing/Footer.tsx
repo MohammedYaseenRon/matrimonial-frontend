@@ -6,7 +6,7 @@ export function Footer() {
   return (
     <View className="bg-gray-800 px-6 py-12">
       <View className="items-center mb-8">
-        <Text className="text-2xl font-bold text-white mb-2">ConnectApp</Text>
+        <Text className="text-2xl font-bold text-white mb-2">{process.env.EXPO_PUBLIC_PROJECT_NAME}</Text>
         <Text className="text-gray-400 text-center">
           Building meaningful connections worldwide
         </Text>
@@ -34,7 +34,7 @@ export function Footer() {
       </View>
       <View className="border-t border-gray-700 pt-6 flex-row justify-between items-center">
         <Text className="text-gray-500 text-sm">
-          © 2024 ConnectApp. All rights reserved.
+          © 2024 {process.env.EXPO_PUBLIC_PROJECT_NAME}. All rights reserved.
         </Text>
         <View className="flex-row gap-4">
           <TouchableOpacity onPress={() => { }} style={{ alignItems: 'center' }}>

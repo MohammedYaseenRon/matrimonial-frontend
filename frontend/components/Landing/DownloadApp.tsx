@@ -24,7 +24,7 @@ export default function DownloadApp() {
             </Text>
             
             <Text className="text-gray-700 text-xl leading-relaxed mb-8">
-              Take your love search on the go! Get the full ConnectApp experience 
+              Take your love search on the go! Get the full {process.env.EXPO_PUBLIC_PROJECT_NAME} experience 
               with our feature-rich mobile application.
             </Text>
 
@@ -91,7 +91,7 @@ export default function DownloadApp() {
                   {/* Phone Content */}
                   <View className="items-center">
                     <Text className="text-2xl mb-4">📱</Text>
-                    <Text className="font-bold text-lg text-gray-800 mb-2">ConnectApp</Text>
+                    <Text className="font-bold text-lg text-gray-800 mb-2">{process.env.EXPO_PUBLIC_PROJECT_NAME}</Text>
                     <Text className="text-gray-600 text-center text-sm mb-6">
                       Find your perfect match
                     </Text>
