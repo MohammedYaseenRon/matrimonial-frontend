@@ -59,7 +59,6 @@ const testimonials = [
     }
 ];
 
-const { width: screenWidth } = Dimensions.get('window');
 
 export default function TestimonialSection() {
     const scrollViewRef = useRef<ScrollView>(null);
@@ -161,25 +160,28 @@ export default function TestimonialSection() {
 
     return (
         <View className="bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 py-20">
-            <View className="max-w-5xl mx-auto px-6">
+            <View className="w-full max-w-6xl mx-auto px-6">
                 {/* Header Section */}
-                <View className="items-center mb-16">
-                    <View className="flex-row items-center mb-6 bg-white/70 border border-purple-200 rounded-full px-4 py-2">
-                        <View className="w-6 h-0.5 bg-purple-500 mr-3" />
-                        <Text className="text-purple-600 font-semibold text-sm uppercase tracking-wider">
-                            Success Stories
+                    <View className="mb-12 lg:mb-16">
+                        <View className="flex-row items-center justify-center mb-6">
+                            <View className="bg-white/70 border border-purple-200 rounded-full px-4 lg:px-8 py-2 flex-row items-center">
+                                <View className="w-4 lg:w-6 h-0.5 bg-purple-500 mr-2 lg:mr-3" />
+                                <Text className="text-purple-600 font-semibold text-xs lg:text-sm uppercase tracking-wider">
+                                    Success Stories
+                                </Text>
+                            </View>
+                        </View>
+
+                        <Text className="text-3xl lg:text-5xl xl:text-6xl font-black text-gray-900 mb-6 text-center leading-tight px-4">
+                            Love Stories That Inspire
+                        </Text>
+
+                        <Text className="text-gray-700 text-base lg:text-lg leading-relaxed text-center max-w-3xl mx-auto px-4">
+                            Real couples, real stories. Discover how our platform has helped
+                            thousands find their perfect match.
                         </Text>
                     </View>
-
-                    <Text className="text-5xl md:text-6xl font-black text-gray-900 mb-6 text-center leading-tight">
-                        Love Stories That Inspire
-                    </Text>
-
-                    <Text className="text-gray-700 text-lg leading-relaxed text-center max-w-3xl">
-                        Real couples, real stories. Discover how our platform has helped
-                        thousands find their perfect match.
-                    </Text>
-                </View>
+        
 
                 {/* Testimonials Carousel */}
                 <View className="overflow-hidden">
@@ -205,20 +207,20 @@ export default function TestimonialSection() {
                 </View>
 
                 {/* Stats Section */}
-                <View className="flex-row justify-center items-center mt-16">
+                <View className="flex-col lg:flex-row justify-center items-center mt-12 lg:mt-16 space-y-8 lg:space-y-0 px-4">
                     <View className="items-center">
-                        <Text className="text-4xl font-black text-purple-600 mb-2">98%</Text>
-                        <Text className="text-gray-600 font-medium">Success Rate</Text>
+                        <Text className="text-3xl lg:text-4xl font-black text-purple-600 mb-2">98%</Text>
+                        <Text className="text-gray-600 font-medium text-sm lg:text-base">Success Rate</Text>
                     </View>
-                    <View className="w-px h-16 bg-gray-300 mx-12" />
+                    <View className="hidden lg:block w-px h-16 bg-gray-300 mx-12" />
                     <View className="items-center">
-                        <Text className="text-4xl font-black text-purple-600 mb-2">500K+</Text>
-                        <Text className="text-gray-600 font-medium">Happy Couples</Text>
+                        <Text className="text-3xl lg:text-4xl font-black text-purple-600 mb-2">500K+</Text>
+                        <Text className="text-gray-600 font-medium text-sm lg:text-base">Happy Couples</Text>
                     </View>
-                    <View className="w-px h-16 bg-gray-300 mx-12" />
+                    <View className="hidden lg:block w-px h-16 bg-gray-300 mx-12" />
                     <View className="items-center">
-                        <Text className="text-4xl font-black text-purple-600 mb-2">4.9★</Text>
-                        <Text className="text-gray-600 font-medium">Average Rating</Text>
+                        <Text className="text-3xl lg:text-4xl font-black text-purple-600 mb-2">4.9★</Text>
+                        <Text className="text-gray-600 font-medium text-sm lg:text-base">Average Rating</Text>
                     </View>
                 </View>
             </View>

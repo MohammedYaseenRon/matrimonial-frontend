@@ -1,19 +1,22 @@
+import CreditPurchase from "@/components/payment/CreditPurchase";
 import { useAuth } from "@/hooks/useAuth";
-import { UserAuthResponse } from "@/types/user-auth";
+import { UserAuthWithProfiles } from "@/types/user-auth";
 import { apiClient } from "@/utils/AuthClient";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 
 export default function Social() {
-    const { accessToken, isAuthenticated, user, isLoading: isAuthLoading } = useAuth();
-    const [profile, setProfile] = useState<UserAuthResponse | null>(null);
+    const { isAuthenticated, user, isLoading: isAuthLoading, hasValidAuth } = useAuth();
+    const [profile, setProfile] = useState<UserAuthWithProfiles | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
     const getUserProfile = async () => {
         try {
             const response = await apiClient.get('/auth/profile');
+            console.log('[Social] User profile response:', response);
+            console.log('[Social] User: ', user)
             return response;
         } catch (error) {
             console.error('[Social] Error fetching user profile:', error);
@@ -26,7 +29,7 @@ export default function Social() {
             return;
         }
 
-        if (isAuthenticated && accessToken) {
+        if (hasValidAuth) {
             const fetchProfile = async () => {
                 setIsLoading(true);
                 setError('');
@@ -34,6 +37,7 @@ export default function Social() {
                     const profileResponse = await getUserProfile();
                     if (profileResponse) {
                         setProfile(profileResponse.data);
+                        console.log('[Social] Profile data:', profileResponse);
                     } else {
                         setError('Failed to load profile data.');
                     }
@@ -49,7 +53,7 @@ export default function Social() {
         } else {
             router.replace('/auth/Login');
         }
-    }, [isAuthenticated, accessToken, isAuthLoading]);
+    }, [isAuthLoading, hasValidAuth]);
 
     if (!isAuthenticated) {
         return (
@@ -77,7 +81,7 @@ export default function Social() {
     }
 
     return (
-        <View className="flex-1 p-4">
+        <ScrollView className="flex-1 p-4">
             <Text className="text-2xl font-bold mb-4">Social Dashboard</Text>
             
             {user && (
@@ -86,12 +90,21 @@ export default function Social() {
                 </View>
             )}
             
-            {profile && (
+            {profile ? (
                 <View>
                     <Text className="text-lg font-semibold mb-2">Profile Data:</Text>
                     <Text>{JSON.stringify(profile, null, 2)}</Text>
+                    <CreditPurchase
+                        section="social"
+                        userEmail={user?.email || 'usmanimohammed12@gmail.com'}
+                        userMobile={user?.mobile || '1234567890'}
+                    />
+                </View>
+            ) : (
+                <View>
+                    <Text className="text-gray-600">No profile data available</Text>
                 </View>
             )}
-        </View>
+        </ScrollView>
     );
 }

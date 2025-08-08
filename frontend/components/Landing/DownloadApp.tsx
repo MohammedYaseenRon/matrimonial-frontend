@@ -8,7 +8,7 @@ export default function DownloadApp() {
   return (
     <View className="bg-gradient-to-br from-pink-100 via-amber-50 to-yellow-50 px-6 py-20">
       <View className="max-w-6xl mx-auto">
-        <View className="flex-row items-center justify-between">
+        <View className="flex-col lg:flex-row items-center justify-between space-y-8 lg:space-y-0 lg:space-x-12">
           {/* Left Column - Content */}
           <View className="flex-1 pr-8">
             <View className="flex-row items-center mb-4">
@@ -54,7 +54,7 @@ export default function DownloadApp() {
                 </View>
                 <View>
                   <Text className="text-white text-xs">Download on the</Text>
-                  <Text className="text-white font-bold text-lg">App Store</Text>
+                  <Text className="text-white font-bold text-sm lg:text-lg">App Store</Text>
                 </View>
               </TouchableOpacity>
               
@@ -64,7 +64,7 @@ export default function DownloadApp() {
                 </View>
                 <View>
                   <Text className="text-white text-xs">Get it on</Text>
-                  <Text className="text-white font-bold text-lg">Google Play</Text>
+                  <Text className="text-white font-bold text-sm lg:text-lg">Google Play</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -83,11 +83,11 @@ export default function DownloadApp() {
           </View>
 
           {/* Right Column - App Preview */}
-          <View className="flex-1 items-center">
+          <View className="w-full lg:w-2/6 max-w-md mx-auto lg:max-w-none">
             <View className="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-2xl">
               {/* Phone Mockup */}
               <View className="bg-gradient-to-b from-orange-400 to-pink-500 rounded-3xl p-1 shadow-xl">
-                <View className="bg-white rounded-3xl p-6 h-96 w-48">
+                <View className="bg-white w-full rounded-3xl p-6 h-96 w-48">
                   {/* Phone Content */}
                   <View className="items-center">
                     <Text className="text-2xl mb-4">📱</Text>

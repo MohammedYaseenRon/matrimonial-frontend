@@ -1,6 +1,15 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+
+const { width: screenWidth } = Dimensions.get('window');
+
+const useResponsiveDimensions = () => {
+  const width = screenWidth;
+  const isSmallScreen = width < 768;
+  
+  return { width, isSmallScreen };
+};
 
 
 const stats = [
@@ -30,6 +39,8 @@ const stats = [
 
 
 export default function AboutUs() {
+  const { width, isSmallScreen } = useResponsiveDimensions();
+  
   return (
     <View className="bg-gradient-to-br from-rose-300 via-pink-200 to-purple-200 px-6 py-20">
       <View className="max-w-6xl mx-auto">
@@ -55,7 +66,7 @@ export default function AboutUs() {
         </View>
 
         {/* Stats Section */}
-        <View className="flex-row justify-center items-center gap-4">
+        <View className="flex-col lg:flex-row justify-center items-center gap-4">
           {stats.map((stat, index) => (
             <View key={index} className="items-center my-4 border border-pink-100 bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg">
               {stat.icon}
@@ -68,3 +79,4 @@ export default function AboutUs() {
     </View>
   );
 }
+

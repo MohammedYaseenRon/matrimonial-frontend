@@ -1,5 +1,5 @@
-import { Configs } from "@/constants/Configs";
 import { useAuth } from "@/hooks/useAuth";
+import { apiClient } from "@/utils/AuthClient";
 import DeviceIdentification from "@/utils/DeviceIdentification";
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from "react";
@@ -35,7 +35,7 @@ export default function Login() {
         
         // If user is already authenticated, redirect to appropriate page
         if (isAuthenticated) {
-            router.replace('/(tabs)');
+            router.replace('/social');
         }
         
         return () => setIsMounted(false);
@@ -68,70 +68,37 @@ export default function Login() {
         try {
             // Get device ID and IP
             const deviceId = await DeviceIdentification.getDeviceId();
-            const ipResponse = await fetch('https://api.ipify.org?format=json');
-            const ip = await ipResponse.json();
+            const ipData = await apiClient.getExternal<{ip: string}>('https://api.ipify.org?format=json');
 
-            const response = await fetch(`${Configs.SERVER_URL}/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email.trim().toLowerCase(),
-                    password: password,
-                    deviceId: deviceId,
-                    ip: ip.ip
-                }),
+            const response = await apiClient.postUnauthenticated('/auth/login', {
+                email: email.trim().toLowerCase(),
+                password: password,
+                deviceId: deviceId,
+                ip: ipData.ip
             });
 
-            const data = await response.json();
+            console.log('Login Response:', response);
 
-            // Handle different response status codes
-            if (!response.ok) {
-                // Handle specific error responses from server
-                if (response.status === 400) {
-                    setErrorMessage(data.message || 'Login failed. Please check your credentials.');
-                } else if (response.status === 401) {
-                    setErrorMessage(data.message || 'Invalid email or password. Please check your credentials and try again.');
-                } else if (response.status === 429) {
-                    setErrorMessage('Too many login attempts. Please try again later.');
-                } else if (response.status >= 500) {
-                    setErrorMessage('Server error. Please try again later.');
-                } else {
-                    setErrorMessage(data.message || `Login failed with status: ${response.status}`);
-                }
-                setIsLoading(false);
-                return;
-            }
-
-            // Handle business logic failures (success: false)
-            if (!data.success) {
-                setErrorMessage(data.message || 'Login failed. Please try again.');
+            if (!response.success) {
+                setErrorMessage(response.error || response.message || 'Login failed');
                 setIsLoading(false);
                 return;
             }
 
             // Success case - Handle the response structure
-            if (data.success && data.data) {
-                const authData = data.data;
+            const data = response.data;
+            if (data && data.user && data.accessToken && data.refreshToken && data.sessionId) {
+                await login(data.user, data.accessToken, data.refreshToken, data.sessionId);
+                setSuccessMessage(response.message || 'Login successful. Welcome back!');
                 
-                // Check if we have the required authentication data
-                if (authData.user && authData.accessToken && authData.refreshToken && authData.sessionId) {
-                    await login(authData.user, authData.accessToken, authData.refreshToken, authData.sessionId);
-                    setSuccessMessage(data.message || 'Login successful. Welcome back!');
-                    
-                    // Show success message briefly before navigation
-                    setTimeout(() => {
-                        if (isMounted) {
-                            router.replace('/social');
-                        }
-                    }, 1500);
-                } else {
-                    setErrorMessage('Login successful but authentication data is missing. Please try again.');
-                    setIsLoading(false);
-                }
+                // Show success message briefly before navigation
+                setTimeout(() => {
+                    if (isMounted) {
+                        router.replace('/social');
+                    }
+                }, 1500);
             } else {
-                setErrorMessage('Login failed due to server response format. Please try again.');
+                setErrorMessage('Login successful but authentication data is missing. Please try again.');
                 setIsLoading(false);
             }
 

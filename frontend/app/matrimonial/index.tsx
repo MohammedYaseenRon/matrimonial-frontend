@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 
 export default function Matrimonial() {
-    const { accessToken, isAuthenticated, user, isLoading: isAuthLoading } = useAuth();
+    const { isAuthenticated, user, isLoading: isAuthLoading, hasValidAuth } = useAuth();
     const [profile, setProfile] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -26,16 +26,16 @@ export default function Matrimonial() {
             return;
         }
 
-        if (isAuthenticated && accessToken) {
+        if (hasValidAuth) {
             const fetchProfile = async () => {
                 setIsLoading(true);
                 setError('');
                 try {
                     const profileResponse = await getUserProfile();
-                    if (profileResponse.success) {
+                    if (profileResponse) {
                         setProfile(profileResponse.data);
                     } else {
-                        setError(profileResponse.message || 'Failed to load profile data.');
+                        setError('Failed to load profile data.');
                     }
                 } catch (err) {
                     console.error('[Matrimonial] Failed to fetch profile:', err);
@@ -49,7 +49,7 @@ export default function Matrimonial() {
         } else {
             router.replace('/auth/Login');
         }
-    }, [isAuthenticated, accessToken, isAuthLoading]);
+    }, [hasValidAuth, isAuthLoading]);
 
     if (!isAuthenticated) {
         return (

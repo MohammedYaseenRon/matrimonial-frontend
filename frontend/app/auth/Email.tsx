@@ -1,5 +1,5 @@
-import { Configs } from '@/constants/Configs';
 import { useRegistrationStore } from '@/stores/registrationStore';
+import { apiClient } from '@/utils/AuthClient';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -102,33 +102,16 @@ export default function Email() {
     setSuccessMessage('');
 
     try {
-      const response = await fetch(`${Configs.SERVER_URL}/otp/generate-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+      const response = await apiClient.postUnauthenticated('/otp/generate-email', { email });
 
-      const data = await response.json();
-
-      // Handle non-200 status codes
-      if (!response.ok) {
-        const errorMsg = data.message || `Server error: ${response.status}`;
-        setErrorMessage(errorMsg);
-        setIsLoading(false);
-        return;
-      }
-
-      // Handle business logic failures (success: false)
-      if (!data.success) {
-        setErrorMessage(data.message || 'Failed to send OTP');
+      if (!response.success) {
+        setErrorMessage(response.error || response.message || 'Failed to send OTP');
         setIsLoading(false);
         return;
       }
 
       // Success case
-      setSuccessMessage(data.message || 'OTP sent successfully to your email');
+      setSuccessMessage(response.message || 'OTP sent successfully to your email');
       setOtpSent(true);
       setIsLoading(false);
       startResendTimer();
@@ -157,37 +140,16 @@ export default function Email() {
     setSuccessMessage('');
 
     try {
-      const response = await fetch(`${Configs.SERVER_URL}/otp/resend-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+      const response = await apiClient.postUnauthenticated('/otp/resend-email', { email });
 
-      const data = await response.json();
-
-      // Handle rate limiting (429) and other errors
-      if (!response.ok) {
-        if (response.status === 429) {
-          setErrorMessage('Too many requests. Please wait before requesting another OTP.');
-        } else {
-          const errorMsg = data.message || `Server error: ${response.status}`;
-          setErrorMessage(errorMsg);
-        }
-        setIsLoading(false);
-        return;
-      }
-
-      // Handle business logic failures (success: false)
-      if (!data.success) {
-        setErrorMessage(data.message || 'Failed to resend OTP');
+      if (!response.success) {
+        setErrorMessage(response.error || response.message || 'Failed to resend OTP');
         setIsLoading(false);
         return;
       }
 
       // Success case
-      setSuccessMessage(data.message || 'OTP resent successfully to your email');
+      setSuccessMessage(response.message || 'OTP resent successfully to your email');
       setIsLoading(false);
       startResendTimer();
 
@@ -216,36 +178,19 @@ export default function Email() {
     setSuccessMessage('');
 
     try {
-      const response = await fetch(`${Configs.SERVER_URL}/otp/verify-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          email, 
-          otp: parseInt(otp) 
-        }),
+      const response = await apiClient.postUnauthenticated('/otp/verify-email', { 
+        email, 
+        otp: parseInt(otp) 
       });
 
-      const data = await response.json();
-
-      // Handle non-200 status codes
-      if (!response.ok) {
-        const errorMsg = data.message || `Verification failed: ${response.status}`;
-        setErrorMessage(errorMsg);
-        setIsVerifying(false);
-        return;
-      }
-
-      // Handle business logic failures (success: false)
-      if (!data.success) {
-        setErrorMessage(data.message || 'OTP verification failed');
+      if (!response.success) {
+        setErrorMessage(response.error || response.message || 'OTP verification failed');
         setIsVerifying(false);
         return;
       }
 
       // Success case
-      setSuccessMessage(data.message || 'Email verified successfully');
+      setSuccessMessage(response.message || 'Email verified successfully');
       setEmailData(email, true);
       
       // Navigate after a brief delay to show success message
